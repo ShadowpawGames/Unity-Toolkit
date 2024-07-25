@@ -1,4 +1,4 @@
-# Shadowpaw.Alchemy
+# Shadowpaw - Unity Toolkit
 
 Common tools and utilities for Unity projects.
 

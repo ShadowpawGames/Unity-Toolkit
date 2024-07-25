@@ -1,0 +1,22 @@
+{
+  "unity": "2022.3",
+  "version": "1.0.0",
+  "name": "org.shadowpaw.unity",
+  "displayName": "Shadowpaw - Unity Toolkit",
+  "description": "Common tools and utilities for Unity projects.",
+  "author": {
+    "name": "Shadowpaw Games",
+    "url": "https://shadowpaw.org/",
+    "email": "admin@shadowpaw.org"
+  },
+  "contributors": [
+    {
+      "name": "Krechevskoy Shadowpaw",
+      "email": "krechevskoy@shadowpaw.org"
+    },
+    {
+      "name": "Bastion Shadowpaw",
+      "email": "bastion@shadowpaw.org"
+    }
+  ]
+}
