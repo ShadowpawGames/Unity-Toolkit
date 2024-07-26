@@ -15,6 +15,7 @@ Initial release of Shadowpaw - Unity Toolkit
 - `Interfaces`: Added interfaces for IProvider, IProvider{T}, and ISubtypeProvider{TBase}
 - `Types`: Added Proxy types for Unity's MonoBehaviour and ScriptableObject
 - `Types`: Added Singleton types for Behaviours and Objects
+- `Types`: Added Timers for delayed and repeated actions
 - `Types`: Added UnityID as a unique identifier for Unity objects
 - `Utils`: Added extensions for LayerMask, List, Reflection, String, Task, and Type
 
