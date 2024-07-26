@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
@@ -12,22 +11,8 @@ namespace Shadowpaw {
   /// without the need to hook into the Unity lifecycle.
   /// </remarks>
   public static class Singletons {
-    private static readonly Dictionary<Type, object> singletons = new();
+    private static readonly TypeRegistry registry = new();
     private static bool isCreating = false;
-
-    /// <summary>
-    /// Gets an existing singleton or creates a new one if it does not exist.
-    /// </summary>
-    /// <param name="factory">
-    /// The factory method to create a new singleton.
-    /// </param>
-    /// <returns>
-    /// The singleton instance for the specified type.
-    /// </returns>
-    public static T GetOrCreate<T>(Func<T> factory) where T : class {
-      if (TryGet(out T singleton)) return singleton;
-      return Set(factory());
-    }
 
     /// <summary>
     /// Tries to create a singleton for a specified type.
@@ -75,15 +60,25 @@ namespace Shadowpaw {
     }
 
     /// <summary>
+    /// Gets an existing singleton or creates a new one if it does not exist.
+    /// </summary>
+    /// <param name="factory">
+    /// The factory method to create a new singleton.
+    /// </param>
+    /// <returns>
+    /// The singleton instance for the specified type.
+    /// </returns>
+    public static T GetOrCreate<T>(Func<T> factory) where T : class {
+      if (TryGet(out T singleton)) return singleton;
+      return Set(factory());
+    }
+
+    /// <summary>
     /// Tries to get the singleton for a specified type.
     /// </summary>
     /// <returns></returns>
     public static bool TryGet<T>(out T singleton) where T : class {
-      if (singletons.TryGetValue(typeof(T), out var value)) {
-        singleton = value as T;
-        return singleton != null;
-      }
-
+      if (registry.TryGet(out singleton)) return true;
       return TryCreate(out singleton);
     }
 
@@ -105,12 +100,10 @@ namespace Shadowpaw {
     /// True if the singleton was successfully set, false otherwise.
     /// </returns>
     public static bool TrySet<T>(T singleton) where T : class {
-      if (singletons.ContainsKey(typeof(T))) {
-        // If the singleton exists, and it is not the same instance.
-        if (singletons[typeof(T)] != null && singletons[typeof(T)] != singleton) {
-          Debug.LogWarning($"Singleton of type {typeof(T)} already exists.");
-          return false;
-        }
+      // If the singleton cannot be registered, return false.
+      if (!registry.Register(singleton, false)) {
+        Debug.LogWarning($"Singleton of type {typeof(T)} already exists.");
+        return false;
       }
 
       // Ensure the singleton is not destroyed when a new scene is loaded.
@@ -123,7 +116,6 @@ namespace Shadowpaw {
         }
       }
 
-      singletons[typeof(T)] = singleton;
       return true;
     }
 
