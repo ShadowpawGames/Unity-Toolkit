@@ -1,6 +1,6 @@
 {
   "unity": "2022.3",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "org.shadowpaw.unity",
   "displayName": "Shadowpaw - Unity Toolkit",
   "description": "Common tools and utilities for Unity projects.",

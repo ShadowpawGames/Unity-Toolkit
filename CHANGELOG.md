@@ -2,6 +2,12 @@
 
 Any notable changes to this project will be documented in this file.
 
+## 1.1.0 - Alchemy Engine Core (2024-07-26)
+
+This update focuses on the core of the Alchemy Engine. This allows for project level Configs and Services, which can be automatically initialized and destroyed with the project, and are controlled from the Project Settings, rather than objects in the scene.
+
+- Created the Shadowpaw.Alchemy namespace
+
 ## 1.0.0 - Initial Release (2024-07-25)
 
 Initial release of Shadowpaw - Unity Toolkit
