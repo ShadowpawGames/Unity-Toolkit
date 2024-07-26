@@ -69,9 +69,17 @@ namespace Shadowpaw {
   /// A Provider that can provide instances of a given base type and its subtypes.
   /// </summary>
   public interface ISubtypeProvider<TBase> : IProvider<TBase> {
+    /// <inheritdoc cref="IProvider{T}.CanProvide"/>
     bool CanProvide<T>() where T : TBase;
+
+    /// <inheritdoc cref="IProvider{T}.TryProvide"/>
     bool TryProvide<T>(out T instance) where T : TBase;
-    T Provide<T>() where T : TBase;
+
+    /// <inheritdoc cref="IProvider{T}.Provide"/>
+    T Provide<T>() where T : TBase {
+      if (TryProvide<T>(out var instance)) return instance;
+      throw new InvalidOperationException($"Cannot provide an instance of type '{typeof(T).FullName}'");
+    }
 
     #region IProvider (Explicit Implementation)
 
