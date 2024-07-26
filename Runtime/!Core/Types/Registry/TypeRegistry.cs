@@ -87,7 +87,10 @@ namespace Shadowpaw {
     /// If true, the value will be added even if it overwrites an existing value.
     /// </param>
     public bool Register(Type type, object value, bool overwrite = true) {
-      if (!overwrite && IsRegistered(type)) return false;
+      if (TryGet(type, out object existing)) {
+        if (existing == value) return true;
+        if (!overwrite) return false;
+      }
 
       _entries[type] = value;
       return true;
