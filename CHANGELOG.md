@@ -13,6 +13,7 @@ Initial release of Shadowpaw - Unity Toolkit
 - `Interfaces`: Added interfaces for IFactory, IFactory{T}, and ISubtypeFactory{TBase}
 - `Interfaces`: Added interfaces for ILocator, ILocator{T}, and ISubtypeLocator{TBase}
 - `Interfaces`: Added interfaces for IProvider, IProvider{T}, and ISubtypeProvider{TBase}
+- `Types`: Added Proxy types for Unity's MonoBehaviour and ScriptableObject
 - `Utils`: Added extensions for LayerMask, List, Reflection, String, Task, and Type
 
 Be good to each other 💕
