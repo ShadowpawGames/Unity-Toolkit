@@ -10,6 +10,9 @@ Initial release of Shadowpaw - Unity Toolkit
 - `Core`: Added some magic code to enable the init and record keywords in Unity
 - `Attributes`: Added Layer attribute for selecting a singular layer
 - `Behaviours`: Added Bootstrapper for time sensitive initialization
+- `Interfaces`: Added interfaces for IFactory, IFactory{T}, and ISubtypeFactory{TBase}
+- `Interfaces`: Added interfaces for ILocator, ILocator{T}, and ISubtypeLocator{TBase}
+- `Interfaces`: Added interfaces for IProvider, IProvider{T}, and ISubtypeProvider{TBase}
 - `Utils`: Added extensions for LayerMask, List, Reflection, String, Task, and Type
 
 Be good to each other 💕
