@@ -9,7 +9,7 @@ namespace Shadowpaw {
   /// This is a base class for creating Singleton ScriptableObjects in Unity.
   /// Instances are lazily created or loaded from the Resources folder when accessed.
   /// </remarks>
-  public abstract class SingletonObject<T> : RootObject where T : SingletonObject<T> {
+  public abstract class SingletonObject<T> : RootObject, ISingleton where T : SingletonObject<T> {
     /// <summary>
     /// A Singleton Instance
     /// </summary>
@@ -31,7 +31,7 @@ namespace Shadowpaw {
     protected virtual void Awake() {
       // Warn if multiple instances exist
       if (!Singletons.TrySet(this as T)) {
-        Debug.LogWarning($"Multiple instances of SingletonObject {typeof(T).Name} found in scene.");
+        Debug.LogWarning($"Multiple instances of SingletonObject {typeof(T).Name} found in project.", this);
       }
     }
   }

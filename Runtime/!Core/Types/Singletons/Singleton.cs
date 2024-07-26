@@ -1,7 +1,14 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Shadowpaw {
+  /// <summary>
+  /// A marker interface for Singletons.
+  /// </summary>
+  /// <remarks>
+  /// This saves the trouble of using reflection on a generic base class.
+  /// </remarks>
+  interface ISingleton { }
+
   /// <summary>
   /// A Singleton MonoBehaviour
   /// </summary>
@@ -10,7 +17,7 @@ namespace Shadowpaw {
   /// Instances are lazily created when accessed and are not destroyed
   /// when new scenes are loaded.
   /// </remarks>
-  public abstract class Singleton<T> : RootBehaviour where T : Singleton<T> {
+  public abstract class Singleton<T> : RootBehaviour, ISingleton where T : Singleton<T> {
     /// <summary>
     /// The single instance of this Singleton.
     /// </summary>
@@ -30,15 +37,9 @@ namespace Shadowpaw {
     protected virtual void Awake() {
       // Ensure only one instance exists
       if (!Singletons.TrySet(this as T)) {
+        Debug.LogWarning($"Singleton of type {typeof(T)} already exists. Destroying new instance.", this);
         Destroy(gameObject);
       }
     }
-  }
-
-  public static class SingletonExtensions {
-    /// <summary>
-    /// Gets the singleton instance of the specified type.
-    /// </summary>
-    public static T GetInstance<T>(this T _) where T : Singleton<T> => Singleton<T>.Instance;
   }
 }

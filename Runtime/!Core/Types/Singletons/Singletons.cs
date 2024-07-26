@@ -11,8 +11,21 @@ namespace Shadowpaw {
   /// without the need to hook into the Unity lifecycle.
   /// </remarks>
   public static class Singletons {
-    public static TypeRegistry Registry { get; } = new();
+    private static readonly TypeRegistry registry = new();
     private static bool isCreating = false;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    public static void OnBeforeSceneLoad() {
+      // Load any Singletons from the Resources folder
+      var resources = Resources.LoadAll("");
+      foreach (var resource in resources) {
+        if (resource is ISingleton) {
+          if (!registry.Register(resource.GetType(), resource, false)) {
+            Debug.LogWarning($"Singleton of type {resource.GetType()} already exists.", resource);
+          }
+        }
+      }
+    }
 
     /// <summary>
     /// Tries to create a singleton for a specified type.
@@ -78,7 +91,7 @@ namespace Shadowpaw {
     /// </summary>
     /// <returns></returns>
     public static bool TryGet<T>(out T singleton) where T : class {
-      if (Registry.TryGet(out singleton)) return true;
+      if (registry.TryGet(out singleton)) return true;
       return TryCreate(out singleton);
     }
 
@@ -101,10 +114,7 @@ namespace Shadowpaw {
     /// </returns>
     public static bool TrySet<T>(T singleton) where T : class {
       // If the singleton cannot be registered, return false.
-      if (!Registry.Register(singleton, false)) {
-        Debug.LogWarning($"Singleton of type {typeof(T)} already exists.");
-        return false;
-      }
+      if (!registry.Register(singleton, false)) return false;
 
       // Ensure the singleton is not destroyed when a new scene is loaded.
       if (singleton is Component component) {
