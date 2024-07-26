@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -52,6 +53,18 @@ namespace Shadowpaw {
       value = default;
       return false;
     }
+
+    /// <summary>
+    /// Gets all entries assignable to a specified type.
+    /// </summary>
+    public IEnumerable GetAll(Type type) {
+      return Entries
+        .Where(entry => type.IsAssignableFrom(entry.Key))
+        .Select(entry => entry.Value);
+    }
+
+    /// <inheritdoc cref="GetAll(Type)"/>
+    public IEnumerable<T> GetAll<T>() => GetAll(typeof(T)).OfType<T>();
 
     /// <summary>
     /// Returns true if the given Type is in the registry and non-null.
