@@ -27,5 +27,12 @@ namespace Shadowpaw {
       // Create a new non-generic instance
       return CreateInstance<T>();
     });
+
+    protected virtual void Awake() {
+      // Warn if multiple instances exist
+      if (!Singletons.TrySet(this as T)) {
+        Debug.LogWarning($"Multiple instances of SingletonObject {typeof(T).Name} found in scene.");
+      }
+    }
   }
 }
