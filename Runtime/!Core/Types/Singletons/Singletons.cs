@@ -81,8 +81,8 @@ namespace Shadowpaw {
     /// <returns>
     /// The singleton instance for the specified type.
     /// </returns>
-    public static T GetOrCreate<T>(Func<T> factory) where T : class {
-      if (TryGet(out T singleton)) return singleton;
+    public static T GetOrCreate<T>(Func<T> factory, bool matchSubtypes = true) where T : class {
+      if (TryGet(out T singleton, matchSubtypes)) return singleton;
       return Set(factory());
     }
 
@@ -90,8 +90,8 @@ namespace Shadowpaw {
     /// Tries to get the singleton for a specified type.
     /// </summary>
     /// <returns></returns>
-    public static bool TryGet<T>(out T singleton) where T : class {
-      if (registry.TryGet(out singleton)) return true;
+    public static bool TryGet<T>(out T singleton, bool matchSubtypes = true) where T : class {
+      if (registry.TryGet(out singleton, matchSubtypes)) return true;
       return TryCreate(out singleton);
     }
 
