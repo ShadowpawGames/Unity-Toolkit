@@ -23,5 +23,17 @@ namespace Shadowpaw.Alchemy {
 
     public static bool IsConcretionOf(this Type type, Type baseType, bool includeSelf = true)
       => type.IsConcrete() && type.IsAssignableTo(baseType) && (includeSelf || type != baseType);
+
+    /// <summary>
+    /// Determines whether the specified type is a subclass of an unbound generic type.
+    /// </summary>
+    public static bool IsSubclassOfRawGeneric(this Type type, Type generic) {
+      while (type != null && type != typeof(object)) {
+        var current = type.IsGenericType ? type.GetGenericTypeDefinition() : type;
+        if (generic == current) return true;
+        type = type.BaseType;
+      }
+      return false;
+    }
   }
 }
