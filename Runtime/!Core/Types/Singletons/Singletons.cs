@@ -11,7 +11,7 @@ namespace Shadowpaw {
   /// without the need to hook into the Unity lifecycle.
   /// </remarks>
   public static class Singletons {
-    private static readonly TypeRegistry registry = new();
+    public static TypeRegistry Registry { get; } = new();
     private static bool isCreating = false;
 
     /// <summary>
@@ -78,7 +78,7 @@ namespace Shadowpaw {
     /// </summary>
     /// <returns></returns>
     public static bool TryGet<T>(out T singleton) where T : class {
-      if (registry.TryGet(out singleton)) return true;
+      if (Registry.TryGet(out singleton)) return true;
       return TryCreate(out singleton);
     }
 
@@ -101,7 +101,7 @@ namespace Shadowpaw {
     /// </returns>
     public static bool TrySet<T>(T singleton) where T : class {
       // If the singleton cannot be registered, return false.
-      if (!registry.Register(singleton, false)) {
+      if (!Registry.Register(singleton, false)) {
         Debug.LogWarning($"Singleton of type {typeof(T)} already exists.");
         return false;
       }
