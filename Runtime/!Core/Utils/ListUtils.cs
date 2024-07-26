@@ -83,16 +83,16 @@ namespace Shadowpaw.Alchemy {
       return -1;
     }
 
-    public static T Random<T>(this T[] arr)
-      => arr[UnityEngine.Random.Range(0, arr.Length)];
-
     public static T Random<T>(this IEnumerable<T> list)
       => list.ElementAt(UnityEngine.Random.Range(0, list.Count()));
 
-    public static IEnumerable<T> Shuffle<T>(this T[] arr)
-      => arr.OrderBy(n => Guid.NewGuid());
-
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> list)
       => list.OrderBy(n => Guid.NewGuid());
+
+    public static IEnumerable<T> NotNull<T>(this IEnumerable<T> list) {
+      foreach (var item in list) {
+        if (item != null) yield return item;
+      }
+    }
   }
 }
