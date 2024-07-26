@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Shadowpaw
-{
+namespace Shadowpaw {
   /// <summary>
   /// Registry for items using their Type as their key.
   /// </summary>
   [Serializable]
-  public class TypeRegistry : IRegistry<KeyValuePair<Type, object>>
-  {
+  public class TypeRegistry : IRegistry<KeyValuePair<Type, object>> {
     [SerializeField] private Dictionary<Type, object> _entries = new();
     public IEnumerable<KeyValuePair<Type, object>> Entries => _entries;
     public IEnumerable<Type> Types => _entries.Keys;
@@ -20,8 +18,7 @@ namespace Shadowpaw
     /// Gets the appropriate key for the given Type.
     /// If an exact match is not found, the first entry of a subtype is returned.
     /// </summary>
-    private Type GetKey(Type type, bool matchSubtypes)
-    {
+    private Type GetKey(Type type, bool matchSubtypes) {
       // If we don't care about subtypes, or we have an exact match, return the key as-is
       if (!matchSubtypes || _entries.ContainsKey(type)) return type;
 
@@ -35,8 +32,7 @@ namespace Shadowpaw
     /// <param name="matchSubtypes">
     /// If true, the method will return the first entry of the given type or a subtype.
     /// </param>
-    public bool TryGet(Type type, out object value, bool matchSubtypes = false)
-    {
+    public bool TryGet(Type type, out object value, bool matchSubtypes = false) {
       var key = GetKey(type, matchSubtypes);
       return _entries.TryGetValue(key, out value) && value != null;
     }
@@ -48,10 +44,8 @@ namespace Shadowpaw
     /// <param name="matchSubtypes">
     /// If true, the method will return the first entry of the given type or a subtype.
     /// </param>
-    public bool TryGet<T>(out T value, bool matchSubtypes = false)
-    {
-      if (TryGet(typeof(T), out object obj, matchSubtypes) && obj is T castObject)
-      {
+    public bool TryGet<T>(out T value, bool matchSubtypes = false) {
+      if (TryGet(typeof(T), out object obj, matchSubtypes) && obj is T castObject) {
         value = castObject;
         return value != null;
       }
@@ -65,8 +59,7 @@ namespace Shadowpaw
     /// <param name="matchSubtypes">
     /// If true, the method will return the first entry of the given type or a subtype.
     /// </param>
-    public bool IsRegistered(Type type, bool matchSubtypes = false)
-    {
+    public bool IsRegistered(Type type, bool matchSubtypes = false) {
       var key = GetKey(type, matchSubtypes);
       return _entries.ContainsKey(key) && _entries[key] != null;
     }
@@ -80,14 +73,15 @@ namespace Shadowpaw
     /// <param name="overwrite">
     /// If true, the value will be added even if it overwrites an existing value.
     /// </param>
-    public void Register(Type type, object value, bool overwrite = true)
-    {
-      if (!overwrite && IsRegistered(type)) return;
+    public bool Register(Type type, object value, bool overwrite = true) {
+      if (!overwrite && IsRegistered(type)) return false;
+
       _entries[type] = value;
+      return true;
     }
 
     /// <inheritdoc cref="Register(Type, object, bool)"/>
-    public void Register<T>(T value, bool overwrite = true)
+    public bool Register<T>(T value, bool overwrite = true)
       => Register(typeof(T), value, overwrite);
 
     /// <summary>
@@ -115,7 +109,7 @@ namespace Shadowpaw
     /// <summary>
     /// Registers the given key-value pair in the registry.
     /// </summary>
-    void IRegistry<KeyValuePair<Type, object>>.Register(KeyValuePair<Type, object> item, bool overwrite)
+    bool IRegistry<KeyValuePair<Type, object>>.Register(KeyValuePair<Type, object> item, bool overwrite)
       => Register(item.Key, item.Value, overwrite);
 
     /// <summary>
@@ -125,8 +119,7 @@ namespace Shadowpaw
     /// The value is only removed if it matches the value associated with the key.
     /// </remarks>
     /// <deprecated>Use <see cref="Unregister(TKey)"/> instead.</deprecated>
-    void IRegistry<KeyValuePair<Type, object>>.Unregister(KeyValuePair<Type, object> item)
-    {
+    void IRegistry<KeyValuePair<Type, object>>.Unregister(KeyValuePair<Type, object> item) {
       if (_entries.ContainsKey(item.Key) && _entries[item.Key].Equals(item.Value))
         _entries.Remove(item.Key);
     }

@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Shadowpaw
-{
+namespace Shadowpaw {
   /// <summary>
   /// A registry of items of a given type.
   /// </summary>
@@ -10,8 +9,7 @@ namespace Shadowpaw
   /// Items in the registry can be registered, unregistered, and enumerated.
   /// May be implemented as a list, set, dictionary, or other collection type.
   /// </remarks>
-  public interface IRegistry<T> : IEnumerable<T>
-  {
+  public interface IRegistry<T> : IEnumerable<T> {
     /// <summary>
     /// The contents of the registry.
     /// </summary>
@@ -28,7 +26,10 @@ namespace Shadowpaw
     /// <param name="overwrite">
     /// If true, the item will be added even if it overwrites an existing item.
     /// </param>
-    public void Register(T item, bool overwrite = true);
+    /// <returns>
+    /// True if the item was successfully registered, false if it was not.
+    /// </returns>
+    public bool Register(T item, bool overwrite = true);
 
     /// <summary>
     /// Removes the given item from the registry.

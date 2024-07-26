@@ -14,9 +14,9 @@ namespace Shadowpaw {
 
     public bool IsRegistered(T item) => _entries.Contains(item);
 
-    public void Register(T item, bool overwrite = true) {
-      if (!overwrite && IsRegistered(item)) return;
-      _entries.Add(item);
+    public bool Register(T item, bool overwrite = true) {
+      if (!overwrite && IsRegistered(item)) return false;
+      return _entries.Add(item);
     }
 
     public void Unregister(T item) => _entries.Remove(item);
@@ -52,9 +52,11 @@ namespace Shadowpaw {
     /// <param name="overwrite">
     /// If true, the value will be added even if it overwrites an existing value.
     /// </param>
-    public void Register(TKey key, TValue value, bool overwrite = true) {
-      if (!overwrite && IsRegistered(key)) return;
+    public bool Register(TKey key, TValue value, bool overwrite = true) {
+      if (!overwrite && IsRegistered(key)) return false;
+
       _entries[key] = value;
+      return true;
     }
 
     /// <summary>
@@ -79,7 +81,7 @@ namespace Shadowpaw {
     /// <summary>
     /// Registers the given key-value pair in the registry.
     /// </summary>
-    void IRegistry<KeyValuePair<TKey, TValue>>.Register(KeyValuePair<TKey, TValue> item, bool overwrite)
+    bool IRegistry<KeyValuePair<TKey, TValue>>.Register(KeyValuePair<TKey, TValue> item, bool overwrite)
       => Register(item.Key, item.Value, overwrite);
 
     /// <summary>
