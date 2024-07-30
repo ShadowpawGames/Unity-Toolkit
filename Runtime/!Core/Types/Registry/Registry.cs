@@ -28,11 +28,26 @@ namespace Shadowpaw {
   /// Registry for a Dictionary of items of a given type.
   /// </summary>
   [Serializable]
-  public class Registry<TKey, TValue> : IRegistry<KeyValuePair<TKey, TValue>> {
+  public class Registry<TKey, TValue> : IRegistry<TKey, TValue> {
     [SerializeField] private Dictionary<TKey, TValue> _entries = new();
+
     public IEnumerable<KeyValuePair<TKey, TValue>> Entries => _entries;
     public IEnumerable<TKey> Keys => _entries.Keys;
     public IEnumerable<TValue> Values => _entries.Values;
+
+    public bool IsRegistered(TKey key)
+      => _entries.ContainsKey(key) && _entries[key] != null;
+
+    public bool Register(TKey key, TValue value, bool overwrite = true) {
+      if (!overwrite && IsRegistered(key)) return false;
+
+      _entries[key] = value;
+      return true;
+    }
+
+    public void Unregister(TKey key) => _entries.Remove(key);
+
+    public void Clear() => _entries.Clear();
 
     /// <summary>
     /// Tries to get the value associated with the given key, if it exists and is non-null.
@@ -41,61 +56,22 @@ namespace Shadowpaw {
       => _entries.TryGetValue(key, out value) && value != null;
 
     /// <summary>
-    /// Returns true if the given key is in the registry and non-null.
+    /// Gets the value associated with the given key, if it exists and is non-null.
     /// </summary>
-    public bool IsRegistered(TKey key)
-      => _entries.ContainsKey(key) && _entries[key] != null;
-
-    /// <summary>
-    /// Registers the given key-value pair in the registry.
-    /// </summary>
-    /// <param name="overwrite">
-    /// If true, the value will be added even if it overwrites an existing value.
-    /// </param>
-    public bool Register(TKey key, TValue value, bool overwrite = true) {
-      if (!overwrite && IsRegistered(key)) return false;
-
-      _entries[key] = value;
-      return true;
+    /// <exception cref="KeyNotFoundException">
+    /// Thrown if the key/value is not found in the registry.
+    /// </exception>
+    public TValue Get(TKey key) {
+      if (TryGet(key, out TValue value)) return value;
+      throw new KeyNotFoundException($"Key '{key}' not found in registry.");
     }
 
     /// <summary>
-    /// Removes the given key from the registry.
+    /// Indexer for the registry.
     /// </summary>
-    public void Unregister(TKey key) => _entries.Remove(key);
-
-    public void Clear() => _entries.Clear();
-
-    #region IRegistry<KeyValuePair<TKey, TValue>> (Explicit Implementation)
-
-    /// <summary>
-    /// Returns true if the given key-value pair is registered in the registry.
-    /// </summary>
-    /// <remarks>
-    /// The value is only considered registered if it matches the value associated with the key.
-    /// </remarks>
-    /// <deprecated>Use <see cref="IsRegistered(TKey)"/> instead.</deprecated> 
-    bool IRegistry<KeyValuePair<TKey, TValue>>.IsRegistered(KeyValuePair<TKey, TValue> item)
-      => _entries.ContainsKey(item.Key) && _entries[item.Key].Equals(item.Value);
-
-    /// <summary>
-    /// Registers the given key-value pair in the registry.
-    /// </summary>
-    bool IRegistry<KeyValuePair<TKey, TValue>>.Register(KeyValuePair<TKey, TValue> item, bool overwrite)
-      => Register(item.Key, item.Value, overwrite);
-
-    /// <summary>
-    /// Removes the given key-value pair from the registry.
-    /// </summary>
-    /// <remarks>
-    /// The value is only removed if it matches the value associated with the key.
-    /// </remarks>
-    /// <deprecated>Use <see cref="Unregister(TKey)"/> instead.</deprecated>
-    void IRegistry<KeyValuePair<TKey, TValue>>.Unregister(KeyValuePair<TKey, TValue> item) {
-      if (_entries.ContainsKey(item.Key) && _entries[item.Key].Equals(item.Value))
-        _entries.Remove(item.Key);
+    public TValue this[TKey key] {
+      get => _entries[key];
+      set => _entries[key] = value;
     }
-
-    #endregion
   }
 }

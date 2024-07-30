@@ -9,11 +9,11 @@ namespace Shadowpaw {
   /// Registry for items using their Type as their key.
   /// </summary>
   [Serializable]
-  public class TypeRegistry : IRegistry<KeyValuePair<Type, object>> {
-    [SerializeField] private Dictionary<Type, object> _entries = new();
-    public IEnumerable<KeyValuePair<Type, object>> Entries => _entries;
-    public IEnumerable<Type> Types => _entries.Keys;
-    public IEnumerable<object> Values => _entries.Values;
+  public class TypeRegistry<TBase> : IRegistry<Type, TBase> {
+    [SerializeField] private Dictionary<Type, TBase> _entries = new();
+    public IEnumerable<KeyValuePair<Type, TBase>> Entries => _entries;
+    public IEnumerable<Type> Keys => _entries.Keys;
+    public IEnumerable<TBase> Values => _entries.Values;
 
     /// <summary>
     /// Gets the appropriate key for the given Type.
@@ -33,7 +33,7 @@ namespace Shadowpaw {
     /// <param name="matchSubtypes">
     /// If true, the method will return the first entry of the given type or a subtype.
     /// </param>
-    public bool TryGet(Type type, out object value, bool matchSubtypes = false) {
+    public bool TryGet(Type type, out TBase value, bool matchSubtypes = false) {
       var key = GetKey(type, matchSubtypes);
       return _entries.TryGetValue(key, out value) && value != null;
     }
@@ -46,7 +46,7 @@ namespace Shadowpaw {
     /// If true, the method will return the first entry of the given type or a subtype.
     /// </param>
     public bool TryGet<T>(out T value, bool matchSubtypes = false) {
-      if (TryGet(typeof(T), out object obj, matchSubtypes) && obj is T castObject) {
+      if (TryGet(typeof(T), out TBase obj, matchSubtypes) && obj is T castObject) {
         value = castObject;
         return value != null;
       }
@@ -66,29 +66,27 @@ namespace Shadowpaw {
     /// <inheritdoc cref="GetAll(Type)"/>
     public IEnumerable<T> GetAll<T>() => GetAll(typeof(T)).OfType<T>();
 
-    /// <summary>
-    /// Returns true if the given Type is in the registry and non-null.
-    /// </summary>
+    public bool IsRegistered(Type type) => IsRegistered(type, false);
+
+    /// <inheritdoc cref="IsRegistered(Type)"/>
     /// <param name="matchSubtypes">
-    /// If true, the method will return the first entry of the given type or a subtype.
+    /// If true, the method will return the first entry of the given type or a Subtype.
     /// </param>
-    public bool IsRegistered(Type type, bool matchSubtypes = false) {
+    public bool IsRegistered(Type type, bool matchSubtypes) {
       var key = GetKey(type, matchSubtypes);
       return _entries.ContainsKey(key) && _entries[key] != null;
     }
 
     /// <inheritdoc cref="IsRegistered(Type, bool)"/>
-    public bool IsRegistered<T>(bool matchSubtypes = false) => IsRegistered(typeof(T), matchSubtypes);
+    public bool IsRegistered<T>(bool matchSubtypes = false) where T : TBase
+      => IsRegistered(typeof(T), matchSubtypes);
 
-    /// <summary>
-    /// Registers the given key-value pair in the registry.
-    /// </summary>
-    /// <param name="overwrite">
-    /// If true, the value will be added even if it overwrites an existing value.
-    /// </param>
-    public bool Register(Type type, object value, bool overwrite = true) {
-      if (TryGet(type, out object existing)) {
-        if (existing == value) return true;
+    public bool Register(Type type, TBase value, bool overwrite = true) {
+      // Confirm TBase is a base type of the given type
+      if (typeof(TBase).IsAssignableFrom(type)) return false;
+
+      if (TryGet(type, out TBase existing)) {
+        if (existing.Equals(value)) return true;
         if (!overwrite) return false;
       }
 
@@ -96,50 +94,21 @@ namespace Shadowpaw {
       return true;
     }
 
-    /// <inheritdoc cref="Register(Type, object, bool)"/>
-    public bool Register<T>(T value, bool overwrite = true)
+    /// <inheritdoc cref="Register(Type, TBase, bool)"/>
+    public bool Register<T>(T value, bool overwrite = true) where T : TBase
       => Register(typeof(T), value, overwrite);
 
-    /// <summary>
-    /// Removes the given key from the registry.
-    /// </summary>
-    public void Unregister(Type type) => _entries.Remove(type);
+    public void Unregister(Type key) => _entries.Remove(key);
 
     /// <inheritdoc cref="Unregister(Type)"/>
-    public void Unregister<T>() => Unregister(typeof(T));
+    public void Unregister<T>() where T : TBase
+      => Unregister(typeof(T));
 
     public void Clear() => _entries.Clear();
 
-    #region IRegistry<KeyValuePair<TKey, TValue>> (Explicit Implementation)
-
-    /// <summary>
-    /// Returns true if the given key-value pair is registered in the registry.
-    /// </summary>
-    /// <remarks>
-    /// The value is only considered registered if it matches the value associated with the key.
-    /// </remarks>
-    /// <deprecated>Use <see cref="IsRegistered(TKey)"/> instead.</deprecated> 
-    bool IRegistry<KeyValuePair<Type, object>>.IsRegistered(KeyValuePair<Type, object> item)
-      => _entries.ContainsKey(item.Key) && _entries[item.Key].Equals(item.Value);
-
-    /// <summary>
-    /// Registers the given key-value pair in the registry.
-    /// </summary>
-    bool IRegistry<KeyValuePair<Type, object>>.Register(KeyValuePair<Type, object> item, bool overwrite)
-      => Register(item.Key, item.Value, overwrite);
-
-    /// <summary>
-    /// Removes the given key-value pair from the registry.
-    /// </summary>
-    /// <remarks>
-    /// The value is only removed if it matches the value associated with the key.
-    /// </remarks>
-    /// <deprecated>Use <see cref="Unregister(TKey)"/> instead.</deprecated>
-    void IRegistry<KeyValuePair<Type, object>>.Unregister(KeyValuePair<Type, object> item) {
-      if (_entries.ContainsKey(item.Key) && _entries[item.Key].Equals(item.Value))
-        _entries.Remove(item.Key);
-    }
-
-    #endregion
   }
+
+  /// <inheritdoc cref="TypeRegistry{TBase}"/>
+  [Serializable]
+  public class TypeRegistry : TypeRegistry<object> { }
 }

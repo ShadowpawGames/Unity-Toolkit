@@ -16,9 +16,9 @@ namespace Shadowpaw {
     IEnumerable<T> Entries { get; }
 
     /// <summary>
-    /// Returns true if the given item is registered in the registry.
+    /// Returns true if the given item is in the registry.
     /// </summary>
-    public bool IsRegistered(T item);
+    bool IsRegistered(T item);
 
     /// <summary>
     /// Adds the given item to the registry.
@@ -29,22 +29,71 @@ namespace Shadowpaw {
     /// <returns>
     /// True if the item was successfully registered, false if it was not.
     /// </returns>
-    public bool Register(T item, bool overwrite = true);
+    bool Register(T item, bool overwrite = true);
 
     /// <summary>
     /// Removes the given item from the registry.
     /// </summary>
-    public void Unregister(T item);
+    void Unregister(T item);
 
     /// <summary>
     /// Clears all entries from the registry.
     /// </summary>
-    public void Clear();
+    void Clear();
 
     #region IEnumerable<T> (Explicit Implementation)
 
     IEnumerator<T> IEnumerable<T>.GetEnumerator() => Entries.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => Entries.GetEnumerator();
+
+    #endregion
+  }
+
+  /// <summary>
+  /// A registry of items of a given type, using a key-value pair.
+  /// </summary>
+  public interface IRegistry<TKey, TValue> : IRegistry<KeyValuePair<TKey, TValue>> {
+    /// <summary>
+    /// The keys in use by the registry.
+    /// </summary>
+    IEnumerable<TKey> Keys { get; }
+
+    /// <summary>
+    /// The values contained in the registry.
+    /// </summary>
+    IEnumerable<TValue> Values { get; }
+
+    /// <summary>
+    /// Returns true if the given key is in the registry.
+    /// </summary>
+    bool IsRegistered(TKey key);
+
+    /// <summary>
+    /// Adds the given item to the registry.
+    /// </summary>
+    /// <param name="overwrite">
+    /// If true, the item will be added even if it overwrites an existing item.
+    /// </param>
+    /// <returns>
+    /// True if the item was successfully registered, false if it was not.
+    /// </returns>
+    public bool Register(TKey key, TValue value, bool overwrite = true);
+
+    /// <summary>
+    /// Removes the given item from the registry.
+    /// </summary>
+    public void Unregister(TKey key);
+
+    #region IRegistry<KeyValuePair<TKey, TValue>> (Explicit Implementation)
+
+    bool IRegistry<KeyValuePair<TKey, TValue>>.IsRegistered(KeyValuePair<TKey, TValue> item)
+      => IsRegistered(item.Key);
+
+    bool IRegistry<KeyValuePair<TKey, TValue>>.Register(KeyValuePair<TKey, TValue> item, bool overwrite)
+      => Register(item.Key, item.Value, overwrite);
+
+    void IRegistry<KeyValuePair<TKey, TValue>>.Unregister(KeyValuePair<TKey, TValue> item)
+      => Unregister(item.Key);
 
     #endregion
   }
