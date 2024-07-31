@@ -24,9 +24,7 @@ namespace Shadowpaw {
     public static T Instance => Singletons.GetOrCreate(() => {
       // Search for an existing instance
       var instance = FindObjectOfType<T>();
-      if (instance != null) {
-        return instance;
-      }
+      if (instance != null) return instance;
 
       // Create a new instance
       var gameObject = new GameObject(typeof(T).Name);
