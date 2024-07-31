@@ -8,6 +8,7 @@ This update focuses on the core of the Alchemy Engine. This allows for project l
 
 - Created the Shadowpaw.Alchemy namespace
 - Added Injector utility for dependency injection
+- Added Injector Contexts for scoped dependency injection
 - Added Configs type for project-level configurations
 
 ## 1.0.0 - Initial Release (2024-07-25)
