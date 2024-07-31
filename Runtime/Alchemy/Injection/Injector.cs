@@ -39,6 +39,7 @@ namespace Shadowpaw.Alchemy {
             .ConcretionsOf<InjectionProvider>()
             .Select(Activator.CreateInstance)
             .Cast<InjectionProvider>()
+            .OrderByDescending(provider => provider.Priority)
             .ToArray();
         }
         return _providers;

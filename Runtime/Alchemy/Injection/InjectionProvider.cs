@@ -6,6 +6,12 @@ namespace Shadowpaw.Alchemy {
   /// Base class for providing injection dependancies.
   /// </summary>
   public abstract class InjectionProvider : IProvider {
+    /// <summary>
+    /// The priority of this provider. <br />
+    /// Providers with higher priority will be checked first.
+    /// </summary>
+    public virtual int Priority { get; init; } = 0;
+
     /// <inheritdoc cref="IProvider.CanProvide"/>
     /// <param name="context">
     /// A context object used to determine the scope of injection. <br />

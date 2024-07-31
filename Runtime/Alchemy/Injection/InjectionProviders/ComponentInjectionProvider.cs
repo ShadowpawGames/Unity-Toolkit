@@ -5,19 +5,19 @@ namespace Shadowpaw.Alchemy {
   /// <summary>
   /// Injection Provider for Unity Components.
   /// </summary>
-  public class ComponentInjectionProvider : InjectionProvider {
-    public override bool CanProvide(Type type, object context = null) {
+  public class ComponentInjectionProvider : InjectionProvider<Component> {
+    public override bool CanProvide<T>(object context = null) {
       return context switch {
-        GameObject gameObject => gameObject.GetComponent(type) != null,
-        Component component => component.GetComponent(type) != null,
+        GameObject gameObject => gameObject.GetComponent<T>() != null,
+        Component component => component.GetComponent<T>() != null,
         _ => false
       };
     }
 
-    public override bool TryProvide(Type type, out object instance, object context = null) {
+    public override bool TryProvide<T>(out T instance, object context = null) {
       instance = context switch {
-        GameObject gameObject => gameObject.GetComponent(type),
-        Component component => component.GetComponent(type),
+        GameObject gameObject => gameObject.GetComponent<T>(),
+        Component component => component.GetComponent<T>(),
         _ => null
       };
       return instance != null;
