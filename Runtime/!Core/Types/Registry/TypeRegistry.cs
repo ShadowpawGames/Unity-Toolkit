@@ -83,7 +83,7 @@ namespace Shadowpaw {
 
     public bool Register(Type type, TBase value, bool overwrite = true) {
       // Confirm TBase is a base type of the given type
-      if (typeof(TBase).IsAssignableFrom(type)) return false;
+      if (!typeof(TBase).IsAssignableFrom(type)) return false;
 
       if (TryGet(type, out TBase existing)) {
         if (existing.Equals(value)) return true;
