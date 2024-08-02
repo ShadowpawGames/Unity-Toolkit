@@ -6,7 +6,7 @@ namespace Shadowpaw.Alchemy {
   /// Attribute to provide information about Services. <br />
   /// Allows a Service to override other existing Services.
   /// </summary>
-  [AttributeUsage(AttributeTargets.Class)]
+  [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
   public class ServiceOverridesAttribute : Attribute {
     /// <summary>
     /// The service types that this service overrides.
