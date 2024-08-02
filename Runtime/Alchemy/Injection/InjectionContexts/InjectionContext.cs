@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Shadowpaw {
   [DisallowMultipleComponent]
-  public class InjectionContext : RootBehaviour, IRegistry<Object> {
+  public class InjectionContext : RootBehaviour, IRegistry<object> {
     [field: Tooltip("These objects will override injections of their given type.")]
-    [field: SerializeField] private HashSet<Object> context = new();
-    public IEnumerable<Object> Entries => context;
+    [field: SerializeField] private HashSet<object> context = new();
+    public IEnumerable<object> Entries => context;
 
     #region IRegistry<Object>
 
-    public bool IsRegistered(Object item) => context.Contains(item);
-    public bool Register(Object item, bool overwrite = true) => context.Add(item);
-    public void Unregister(Object item) => context.Remove(item);
+    public bool IsRegistered(object item) => context.Contains(item);
+    public bool Register(object item, bool overwrite = true) => context.Add(item);
+    public void Unregister(object item) => context.Remove(item);
     public void Clear() => context.Clear();
 
     #endregion
@@ -93,6 +92,29 @@ namespace Shadowpaw {
       }
       instance = default;
       return false;
+    }
+
+    /// <inheritdoc cref="TryGet(Type, out object, bool)" />
+    /// <summary>
+    /// Gets all instances of the given type.
+    /// </summary>
+    public IEnumerable<object> GetAll(Type type, bool matchSubtypes = false) {
+      foreach (var obj in context) {
+        if (matchSubtypes && type.IsInstanceOfType(obj)) {
+          yield return obj;
+        } else if (type == obj.GetType()) {
+          yield return obj;
+        }
+      }
+    }
+
+    /// <inheritdoc cref="GetAll(Type, bool)" />
+    public IEnumerable<T> GetAll<T>(bool matchSubtypes = false) {
+      foreach (var obj in GetAll(typeof(T), matchSubtypes)) {
+        if (obj is T castObj) {
+          yield return castObj;
+        }
+      }
     }
   }
 }

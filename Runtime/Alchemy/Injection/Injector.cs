@@ -383,7 +383,7 @@ namespace Shadowpaw.Alchemy {
     /// <param name="includeOptional">
     /// If true, optional dependencies will be included in the result.
     /// </param>
-    public static IEnumerable<Type> GetInjectionDependencies(this Type type, bool includeOptional) {
+    public static IEnumerable<Type> GetInjectionDependencies(this Type type, bool includeOptional = true) {
       HashSet<Type> dependancies = new();
 
       // Add Constructor dependencies...
