@@ -2,6 +2,15 @@
 
 Any notable changes to this project will be documented in this file.
 
+## 1.1.1 - Toolkit Additions (2024-08-01)
+
+Focused on adding simple utilities to the toolkit.
+
+- `Types`: Added IPrimitiveValue to allow for primitive values to be serialized in Unity.
+  - Allows the user to specify any type of primitive value in the inspector.
+  - Automatically serializes the value to the correct type.
+  - Useful for lists and dictionaries of primitive values.
+
 ## 1.1.0 - Alchemy Engine Core (2024-07-26)
 
 This update focuses on the core of the Alchemy Engine. This allows for project level Configs and Services, which can be automatically initialized and destroyed with the project, and are controlled from the Project Settings, rather than objects in the scene.
