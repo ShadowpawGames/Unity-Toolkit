@@ -7,10 +7,11 @@ Any notable changes to this project will be documented in this file.
 This update focuses on the core of the Alchemy Engine. This allows for project level Configs and Services, which can be automatically initialized and destroyed with the project, and are controlled from the Project Settings, rather than objects in the scene.
 
 - Created the Shadowpaw.Alchemy namespace
+- Added Alchemy Engine and associated types
+- Added Config types for project-level configs 
+- Added Service types for project-level services
 - Added Injector utility for dependency injection
 - Added Injector Contexts for scoped dependency injection
-- Added Service types for project-level services
-- Added Config types for project-level configs
 
 ## 1.0.0 - Initial Release (2024-07-25)
 
