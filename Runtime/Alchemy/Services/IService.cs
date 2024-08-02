@@ -17,25 +17,25 @@ namespace Shadowpaw.Alchemy {
   /// </remarks>
   public interface IService {
     /// <summary>
-    /// Called by the Engine when the service is initialized. <br />
+    /// Called by the Engine to initialize the Service. <br />
     /// Dependencies will be injected before this method is called.
     /// </summary>
     /// <returns>
     /// A <see cref="Task"/> which completes when the service is initialized. <br />
     /// Return Task.CompletedTask if no async work is required.
     /// </returns>
-    Task OnServiceInit();
+    Task InitializeService();
 
     /// <summary>
-    /// Called by the Engine when the service is reset. <br />
+    /// Called by the Engine to reset the Service. <br />
     /// This should return the Service to its initial state.
     /// </summary>
-    void OnServiceReset();
+    void ResetService();
 
     /// <summary>
-    /// Called by the Engine when the service is destroyed. <br />
-    /// This should clean up any resources used by the service.
+    /// Called by the Engine to destroy the Service. <br />
+    /// This should release any resources used by the service.
     /// </summary>
-    void OnServiceDestroy();
+    void DestroyService();
   }
 }
