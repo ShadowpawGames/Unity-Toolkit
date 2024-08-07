@@ -4,7 +4,9 @@ Any notable changes to this project will be documented in this file.
 
 ## 1.1.2 - Version Change (2024-08-07)
 
-Updated to Unity 2023+ to include the new "Awaitable" system, removing the reliance on UniTask.  
+Updated to Unity 2023+ to include the new "Awaitable" system, removing the reliance on UniTask.
+
+- `UI`: Added FlexibleGridLayoutGroup for dynamic grid layouts.
 
 ## 1.1.1 - Toolkit Additions (2024-08-01)
 
