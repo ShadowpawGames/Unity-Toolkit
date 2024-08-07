@@ -100,6 +100,12 @@ namespace Shadowpaw {
 
     public void Unregister(Type key) => _entries.Remove(key);
 
+    public void Unregister(TBase value) {
+      foreach (var (key, val) in _entries) {
+        if (value.Equals(val)) _entries.Remove(key);
+      }
+    }
+
     /// <inheritdoc cref="Unregister(Type)"/>
     public void Unregister<T>() where T : TBase
       => Unregister(typeof(T));

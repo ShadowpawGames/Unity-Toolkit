@@ -84,6 +84,11 @@ namespace Shadowpaw {
     /// </summary>
     public void Unregister(TKey key);
 
+    /// <summary>
+    /// Removes the given value from any keys it is associated with.
+    /// </summary>
+    public void Unregister(TValue value);
+
     #region IRegistry<KeyValuePair<TKey, TValue>> (Explicit Implementation)
 
     bool IRegistry<KeyValuePair<TKey, TValue>>.IsRegistered(KeyValuePair<TKey, TValue> item)

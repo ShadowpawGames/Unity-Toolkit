@@ -33,6 +33,10 @@ namespace Shadowpaw.Alchemy {
     public static void Unregister<T>() where T : IService
       => serviceRegistry.Unregister<T>();
 
+    /// <inheritdoc cref="TypeRegistry{T}.Unregister(T)"/>
+    public static void Unregister<T>(T service) where T : IService
+      => serviceRegistry.Unregister(service);
+
     /// <inheritdoc cref="TypeRegistry{T}.Clear"/>
     public static void Clear()
       => serviceRegistry.Clear();

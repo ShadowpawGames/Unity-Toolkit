@@ -47,6 +47,12 @@ namespace Shadowpaw {
 
     public void Unregister(TKey key) => _entries.Remove(key);
 
+    public void Unregister(TValue value) {
+      foreach (var (key, val) in _entries) {
+        if (value.Equals(val)) _entries.Remove(key);
+      }
+    }
+
     public void Clear() => _entries.Clear();
 
     /// <summary>
