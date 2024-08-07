@@ -44,8 +44,8 @@ namespace Shadowpaw.Alchemy {
     /// <summary>
     /// Gets an existing instance of the requested type, or creates a new one.
     /// </summary>
-    public static object GetOrCreate<T>(out object instance) {
-      if (Injector.TryProvide(out instance, RootObject, force: true)) {
+    public static T GetOrCreate<T>() {
+      if (Injector.TryProvide(out T instance, RootObject, force: true)) {
         if (instance is IService service) {
           Services.Register(typeof(T), service);
         }
