@@ -26,7 +26,7 @@ namespace Shadowpaw.Alchemy {
     /// </summary>
     public int Priority { get; init; }
 
-    public ServiceInfoAttribute(string displayName) {
+    public ServiceInfoAttribute(string displayName = "") {
       DisplayName = displayName;
     }
   }
