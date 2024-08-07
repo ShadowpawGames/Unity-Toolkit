@@ -2,6 +2,10 @@
 
 Any notable changes to this project will be documented in this file.
 
+## 1.1.2 - Version Change (2024-08-07)
+
+Updated to Unity 2023+ to include the new "Awaitable" system, removing the reliance on UniTask.  
+
 ## 1.1.1 - Toolkit Additions (2024-08-01)
 
 Focused on adding simple utilities to the toolkit.
