@@ -4,7 +4,7 @@ namespace Shadowpaw {
   public class GlobalInjectionContext : InjectionContext, ISingleton {
     public static GlobalInjectionContext Instance => Singletons.GetOrCreate(() => {
       // Search for an existing instance
-      var instance = FindObjectOfType<GlobalInjectionContext>();
+      var instance = FindFirstObjectByType<GlobalInjectionContext>();
       if (instance != null) return instance;
 
       // Create a new instance
