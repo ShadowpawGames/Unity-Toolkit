@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Shadowpaw.UI {
   public class TabGroup : MonoBehaviour {
-
     [field: SerializeField] public TabButton Selected { get; private set; }
     public int SelectedIndex => GetIndex(Selected);
 
@@ -13,12 +13,15 @@ namespace Shadowpaw.UI {
     [SerializeField] private List<TabButton> tabs = new();
 
     private void Start() {
+      // Unsubscribe tabs that are null or inactive
+      tabs = tabs.OfType<TabButton>()
+        .Where(tab => tab.gameObject.activeInHierarchy)
+        .ToList();
+
       // Force selected events to fire
-      if (Selected != null) {
-        var temp = Selected;
-        Selected = null;
-        SetSelected(temp);
-      }
+      var temp = Selected != null ? Selected : tabs.FirstOrDefault();
+      Selected = null;
+      SetSelected(temp);
     }
 
     private void UpdateTabs() {
