@@ -23,7 +23,7 @@ namespace Shadowpaw {
     /// </summary>
     public static T Instance => Singletons.GetOrCreate(() => {
       // Search for an existing instance
-      var instance = FindObjectOfType<T>();
+      var instance = FindFirstObjectByType<T>();
       if (instance != null) return instance;
 
       // Create a new instance
