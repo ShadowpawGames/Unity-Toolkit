@@ -23,7 +23,7 @@ namespace Shadowpaw.UI {
 
     private void UpdateTabs() {
       foreach (var tab in tabs) {
-        if (tab == null) continue;
+        if (tab == null || tab.Image == null) continue;
         if (tab == Selected) {
           tab.Image.sprite = tab.SelectedSprite != null ? tab.SelectedSprite : tab.NormalSprite;
           tab.Image.color = tab.SelectedColor;
