@@ -9,6 +9,7 @@ Updated to Unity 2023+ to include the new "Awaitable" system, removing the relia
 - `InputSystem`: Added Shadowpaw.InputSystem for handling Unity's new InputSystem.
 - `InputSystem`: Added InputActionEvent for handling input actions in the inspector.
 - `UI`: Added FlexibleGridLayoutGroup for dynamic grid layouts.
+- `UI`: Added TabGroup and TabButton for tabbed UIs.
 
 ## 1.1.1 - Toolkit Additions (2024-08-01)
 
