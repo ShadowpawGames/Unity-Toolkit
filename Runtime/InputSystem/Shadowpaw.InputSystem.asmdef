@@ -1,0 +1,26 @@
+{
+    "name": "InputSystem",
+    "rootNamespace": "Shadowpaw.InputSystem",
+    "references": [
+        "GUID:7acfdbce8472bd54387edd3604476f6e",
+        "GUID:75469ad4d38634e559750d17036d5f7c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "ODIN_INSPECTOR",
+        "NEW_INPUT_SYSTEM"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "",
+            "define": "NEW_INPUT_SYSTEM"
+        }
+    ],
+    "noEngineReferences": false
+}

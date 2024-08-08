@@ -6,6 +6,8 @@ Any notable changes to this project will be documented in this file.
 
 Updated to Unity 2023+ to include the new "Awaitable" system, removing the reliance on UniTask.
 
+- `InputSystem`: Added Shadowpaw.InputSystem for handling Unity's new InputSystem.
+- `InputSystem`: Added InputActionEvent for handling input actions in the inspector.
 - `UI`: Added FlexibleGridLayoutGroup for dynamic grid layouts.
 
 ## 1.1.1 - Toolkit Additions (2024-08-01)
@@ -23,7 +25,7 @@ This update focuses on the core of the Alchemy Engine. This allows for project l
 
 - Created the Shadowpaw.Alchemy namespace
 - Added Alchemy Engine and associated types
-- Added Config types for project-level configs 
+- Added Config types for project-level configs
 - Added Service types for project-level services
 - Added Injector utility for dependency injection
 - Added Injector Contexts for scoped dependency injection
