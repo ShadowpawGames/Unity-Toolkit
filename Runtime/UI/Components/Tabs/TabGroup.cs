@@ -12,12 +12,7 @@ namespace Shadowpaw.UI {
 
     [SerializeField] private List<TabButton> tabs = new();
 
-    private void Start() {
-      // Unsubscribe tabs that are null or inactive
-      tabs = tabs.OfType<TabButton>()
-        .Where(tab => tab.gameObject.activeInHierarchy)
-        .ToList();
-
+    private void OnEnable() {
       // Force selected events to fire
       var temp = Selected != null ? Selected : tabs.FirstOrDefault();
       Selected = null;
@@ -55,6 +50,26 @@ namespace Shadowpaw.UI {
       return tabs.IndexOf(tab);
     }
 
+    public int NextIndex(int index) {
+      for (int i = 0; i < tabs.Count; i++) {
+        var tab = GetButton(index++);
+        if (tab != null && tab.gameObject.activeInHierarchy) {
+          break;
+        }
+      }
+      return index;
+    }
+
+    public int PreviousIndex(int index) {
+      for (int i = 0; i < tabs.Count; i++) {
+        var tab = GetButton(index--);
+        if (tab != null && tab.gameObject.activeInHierarchy) {
+          break;
+        }
+      }
+      return index;
+    }
+
     public TabButton GetButton(int index) {
       if (index < 0) return GetButton(tabs.Count + index);
       return tabs[index % tabs.Count];
@@ -84,10 +99,10 @@ namespace Shadowpaw.UI {
       => SetSelected(GetButton(index));
 
     public void SelectNext()
-      => SetSelected(SelectedIndex + 1);
+      => SetSelected(NextIndex(SelectedIndex));
 
     public void SelectPrevious()
-      => SetSelected(SelectedIndex - 1);
+      => SetSelected(PreviousIndex(SelectedIndex));
 
     public void SelectHovered()
       => SetSelected(HoverTarget != null ? HoverTarget : Selected);
@@ -108,10 +123,10 @@ namespace Shadowpaw.UI {
       => SetHoverTarget(GetButton(index));
 
     public void HoverNext()
-      => SetHoverTarget(HoverIndex + 1);
+      => SetHoverTarget(NextIndex(HoverIndex));
 
     public void HoverPrevious()
-      => SetHoverTarget(HoverIndex - 1);
+      => SetHoverTarget(PreviousIndex(HoverIndex));
 
     #endregion
   }
