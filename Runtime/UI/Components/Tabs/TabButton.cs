@@ -52,13 +52,19 @@ namespace Shadowpaw.UI {
     #endregion
 
     private void Awake() {
-      TabGroup.Subscribe(this);
-
       Image = GetComponent<Image>();
       if (NormalSprite == null) NormalSprite = Image.sprite;
 
       Image.sprite = NormalSprite;
       Image.color = NormalColor;
+    }
+
+    private void OnEnable() {
+      if (TabGroup != null) TabGroup.Subscribe(this);
+    }
+
+    private void OnDisable() {
+      if (TabGroup != null) TabGroup.Unsubscribe(this);
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
